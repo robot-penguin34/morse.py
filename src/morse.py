@@ -12,7 +12,7 @@ p = pyaudio.PyAudio()
 
 volume = 0.5  # range [0.0, 1.0]
 fs = 44100  # sampling rate, Hz, must be integer
-f = 440.0  # sine frequency, Hz, may be float
+f = 800.0 # 440.0  # sine frequency, Hz, may be float
 stream = p.open(format=pyaudio.paFloat32,
                     channels=1,
                     rate=fs,
@@ -42,13 +42,17 @@ MORSE_CODE_DICT = { 'A':'.-', 'B':'-...',
 
 
 def play_cw(duration=0.1):
-    # generate samples, note conversion to float32 array
-    num_samples = int(fs * duration)
-    samples = [volume * math.sin(2 * math.pi * k * f / fs) for k in range(0, num_samples)]
+    try:
+        # generate samples, note conversion to float32 array
+        num_samples = int(fs * duration)
+        samples = [volume * math.sin(2 * math.pi * k * f / fs) for k in range(0, num_samples)]
 
-    output_bytes = array.array('f', samples).tobytes()
+        output_bytes = array.array('f', samples).tobytes()
 
-    stream.write(output_bytes)
+        stream.write(output_bytes)
+    except KeyboardInterrupt:
+        stream.stop_stream()
+        p.close(stream)
 
 def play_morse_char(input: str):
     if len(input) > 1:

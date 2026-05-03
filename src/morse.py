@@ -45,8 +45,6 @@ def play_cw(duration=0.1):
 
     output_bytes = array.array('f', samples).tobytes()
 
-    # for paFloat32 sample values must be in range [-1.0, 1.0]
-    
     stream.write(output_bytes)
 
 def play_morse_char(input: str):

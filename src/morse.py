@@ -4,6 +4,7 @@ import sys
 import time
 import threading
 import os
+import random
 
 import pyaudio
 
@@ -92,17 +93,20 @@ def practice_file(filepath: str):
     
     if not os.path.exists(filepath):
         return print(f"invalid filepath \"{filepath}\"")
+    
+    with open(filepath, "r") as f: 
+        shuffled = f.readlines()
+        random.shuffle(shuffled)
 
-    with open(filepath, "r") as file:
-        for line in file:
-            practice_str(line)
-            time.sleep(3)
+    for line in shuffled:
+        practice_str(line)
+        time.sleep(3)
 
-        print("file finished!")
+    print("file finished!")
             
 
 def practice_str(line: str):
-    t = threading.Thread(target=play_morse_str, args=[line])
+    t = threading.Thread(target=play_morse_str, args=[line], daemon=True)
     t.start()
         
     user_input: str = input("your guess >")
@@ -113,7 +117,7 @@ def practice_str(line: str):
             continue
 
         guess_buffer += char
-    
+
     answer_buffer = ""
     for char in line:
         if char != " " and char.upper() not in MORSE_CODE_DICT:
@@ -124,15 +128,21 @@ def practice_str(line: str):
     print(f"Your answer:\n{guess_buffer}\n")
     print(f"Correct answer:\n{answer_buffer}\n")
 
-
+    
+    print("because of python weirdness, please wait for the audio to stop")
     t.join() # wait for it to stop
 
 
 
 def main():
+    global dot_duration
+
     argc = len(sys.argv)
-    if argc < 2 or argc > 2:
-        return print(f"This script expects the name of a training file, as seen in the included pratice_files (remember to include .txt)\n")
+    if argc < 2 or argc > 3:
+        return print(f"This script expects the name of a training file, as seen in the included pratice_files (remember to include .txt), second arg is to speed it up\n")
+
+    if argc == 3:
+        dot_duration /= float(sys.argv[2])
 
     try:
         filepath = os.path.dirname(os.path.abspath(__file__))

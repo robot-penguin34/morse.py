@@ -18,6 +18,8 @@ stream = p.open(format=pyaudio.paFloat32,
                     rate=fs,
                     output=True)
 
+CLEAR_CHAR = "\033[2J"
+
 dot_duration = 0.25
 dash_duration = 3 * dot_duration
 CHAR_PAUSE_DURATION = 0.8 * dash_duration
@@ -135,6 +137,9 @@ def practice_str(line: str):
     
     print("because of python weirdness, please wait for the audio to stop")
     t.join() # wait for it to stop
+
+    time.sleep(2)
+    print(CLEAR_CHAR)
 
 
 

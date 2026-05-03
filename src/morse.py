@@ -2,6 +2,7 @@ import array
 import math
 import sys
 import time
+import threading
 
 import pyaudio
 
@@ -53,13 +54,10 @@ def play_morse_char(input: str):
 
     # ignore if this isn't a valid character
     if input.upper() not in MORSE_CODE_DICT:
-        print("DEBUG: not a real char")
         return
 
     # handle letter pause for sanity
     time.sleep(CHAR_PAUSE_DURATION) 
-
-    print(input)
     
     for dot_or_dash in MORSE_CODE_DICT[input.upper().strip()]:
         time.sleep(ELEMENT_PAUSE_DURATION) # more sanity stuff
@@ -89,10 +87,43 @@ def play_morse_str(input: str):
 
         play_morse_char(letter)
 
+def practice_file(filepath: str):
+    with open(filepath, "r") as file:
+        for line in file:
+            pass
+            
+
+def practice_str(line: str):
+    t = threading.Thread(target=play_morse_str, args=[line])
+    t.start()
+        
+    user_input: str = input("your guess >")
+    guess_buffer: str = ""
+
+    for char in user_input:
+        if char != " " and char.upper() not in MORSE_CODE_DICT:
+            continue
+
+        guess_buffer += char
+    
+    answer_buffer = ""
+    for char in line:
+        if char != " " and char.upper() not in MORSE_CODE_DICT:
+            continue
+
+        answer_buffer += char
+
+    print(f"Your answer:\n{guess_buffer}\n")
+    print(f"Correct answer:\n{answer_buffer}\n")
+
+
+    t.join() # wait for it to stop
+
+
 
 def main():
     try:
-        play_morse_str("Hello, World!")
+        practice_str("Hello, World!")
     except KeyboardInterrupt:
         pass
 

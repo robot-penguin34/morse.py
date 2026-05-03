@@ -3,6 +3,7 @@ import math
 import sys
 import time
 import threading
+import os
 
 import pyaudio
 
@@ -88,9 +89,16 @@ def play_morse_str(input: str):
         play_morse_char(letter)
 
 def practice_file(filepath: str):
+    
+    if not os.path.exists(filepath):
+        return print(f"invalid filepath \"{filepath}\"")
+
     with open(filepath, "r") as file:
         for line in file:
-            pass
+            practice_str(line)
+            time.sleep(3)
+
+        print("file finished!")
             
 
 def practice_str(line: str):
@@ -122,8 +130,16 @@ def practice_str(line: str):
 
 
 def main():
+    argc = len(sys.argv)
+    if argc < 2 or argc > 2:
+        return print(f"This script expects the name of a training file, as seen in the included pratice_files (remember to include .txt)\n")
+
     try:
-        practice_str("Hello, World!")
+        filepath = os.path.dirname(os.path.abspath(__file__))
+        training_filepath = os.path.join(os.path.dirname(filepath), "practice_files")
+        truepath = os.path.join(training_filepath, sys.argv[1])
+
+        practice_file(truepath)
     except KeyboardInterrupt:
         pass
 

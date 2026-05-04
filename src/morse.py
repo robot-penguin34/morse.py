@@ -18,8 +18,6 @@ stream = p.open(format=pyaudio.paFloat32,
                     rate=fs,
                     output=True)
 
-CLEAR_CHAR = "\033[2J"
-
 dot_duration = 0.25
 dash_duration = 3 * dot_duration
 CHAR_PAUSE_DURATION = 0.8 * dash_duration
@@ -105,6 +103,11 @@ def practice_file(filepath: str):
         random.shuffle(shuffled)
 
     for line in shuffled:
+        if line.strip().startswith("//"): # comment lines
+            continue
+        if line.strip() == "": # empty lines
+            continue
+
         practice_str(line)
         time.sleep(3)
 
@@ -139,7 +142,6 @@ def practice_str(line: str):
     t.join() # wait for it to stop
 
     time.sleep(2)
-    print(CLEAR_CHAR)
 
 
 

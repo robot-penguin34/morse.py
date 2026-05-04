@@ -1,0 +1,26 @@
+// Credit where credit is due, a lot of these abbreviations are from this wikipedia page: https://en.wikipedia.org/wiki/Morse_code_abbreviations
+// I made this script to study morse code, so this is more of a estimated list of potentially useful(?) codes
+// Please open a github issue if there are codes you think are widely important
+
+AGN
+AR
+BK
+C
+CQ
+SOS
+CS
+DX
+FM
+SSB
+FWD
+KN
+K
+N
+OK
+73
+THX
+RN
+DE
+QSO
+5nn
+599

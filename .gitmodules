@@ -1,0 +1,3 @@
+[submodule "practice_files/tabatkins/wordle-list"]
+	path = practice_files/tabatkins/wordle-list
+	url = git@github.com:tabatkins/wordle-list.git
